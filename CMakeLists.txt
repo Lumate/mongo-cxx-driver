@@ -12,46 +12,82 @@ include_directories(src/
                     ${Boost_INCLUDE_DIR}
                     )
 
-add_subdirectory(src/third_party/gtest-1.7.0)
-include_directories(${gtest_SOURCE_DIR}/include)
-
 add_definitions(-DMONGO_EXPOSE_MACROS)
+add_definitions("-Wno-deprecated-declarations")
 
-aux_source_directory(src/mongo/util UTIL_SRC)
-aux_source_directory(src/mongo/util/net NET_SRC)
-aux_source_directory(src/mongo/util/concurrency/ CONC_SRC)
-aux_source_directory(src/mongo/db DB_SRC)
-aux_source_directory(src/mongo/client CLIENT_SRC)
-aux_source_directory(src/mongo/bson BSON_SRC)
-aux_source_directory(src/mongo/bson/util BSONU_SRC)
-aux_source_directory(src/mongo/base BASE_SRC)
-aux_source_directory(src/mongo/platform PLAT_SRC)
-aux_source_directory(src/mongo/dbtests TEST_SRC)
-aux_source_directory(src/mongo/logger LOG_SRC)
-aux_source_directory(src/mongo/dbtests/mock/ MOCK_SRC)
-aux_source_directory(src/third_party/murmurhash3 MURMUR_SRC)
-
-list(REMOVE_ITEM CLIENT_SRC src/mongo/client/sasl_client_authenticate_impl.cpp 
-			    src/mongo/client/include_bsonh_test.cpp
-			    src/mongo/client/sasl_client_session.cpp
-			    src/mongo/client/include_dbclienth_test.cpp)
-
-
-add_library(mongoclient SHARED
-	    ${UTIL_SRC}
-	    ${NET_SRC}
-	    ${CONC_SRC}
-	    ${DB_SRC}
-	    ${CLIENT_SRC}
-	    ${BSON_SRC}
-	    ${BASE_SRC}
-	    ${PLAT_SRC}
-	    ${TEST_SRC}
-	    ${LOG_SRC}
-	    ${BSONU_SRC}
-	    ${MOCK_SRC}
-	    ${MURMUR_SRC}
+set (ALL_SRC  src/mongo/base/global_initializer.cpp
+	      src/mongo/base/global_initializer_registerer.cpp
+	      src/mongo/base/init.cpp
+	      src/mongo/base/initializer_context.cpp
+	      src/mongo/base/initializer.cpp
+	      src/mongo/base/initializer_dependency_graph.cpp
+	      src/mongo/base/make_string_vector.cpp
+	      src/mongo/base/parse_number.cpp
+	      src/mongo/base/status.cpp
+	      src/mongo/base/string_data.cpp
+	      src/mongo/bson/bson_validate.cpp
+	      src/mongo/bson/oid.cpp
+	      src/mongo/bson/optime.cpp
+	      src/mongo/client/bulk_operation_builder.cpp
+	      src/mongo/client/bulk_update_builder.cpp
+	      src/mongo/client/bulk_upsert_builder.cpp
+	      src/mongo/client/command_writer.cpp
+	      src/mongo/client/connpool.cpp
+	      src/mongo/client/dbclient.cpp
+	      src/mongo/client/dbclientcursor.cpp
+	      src/mongo/client/dbclientcursorshimarray.cpp
+	      src/mongo/client/dbclientcursorshimcursorid.cpp
+	      src/mongo/client/dbclient_rs.cpp
+	      src/mongo/client/delete_write_operation.cpp
+	      src/mongo/client/exceptions.cpp
+	      src/mongo/client/gridfs.cpp
+	      src/mongo/client/index_spec.cpp
+	      src/mongo/client/init.cpp
+	      src/mongo/client/insert_write_operation.cpp
+	      src/mongo/client/options.cpp
+	      src/mongo/client/replica_set_monitor.cpp
+	      src/mongo/client/sasl_client_authenticate.cpp
+	      src/mongo/client/sasl_sspi.cpp
+	      src/mongo/client/update_write_operation.cpp
+	      src/mongo/client/wire_protocol_writer.cpp
+	      src/mongo/client/write_concern.cpp
+	      src/mongo/client/write_operation_base.cpp
+	      src/mongo/client/write_result.cpp
+	      src/mongo/db/dbmessage.cpp
+	      src/mongo/db/jsobj.cpp
+	      src/mongo/db/json.cpp
+	      src/mongo/logger/logger.cpp
+	      src/mongo/logger/log_manager.cpp
+	      src/mongo/logger/log_severity.cpp
+	      src/mongo/logger/logstream_builder.cpp
+	      src/mongo/logger/message_event_utf8_encoder.cpp
+	      src/mongo/logger/message_log_domain.cpp
+	      src/mongo/platform/process_id.cpp
+	      src/mongo/platform/random.cpp
+	      src/mongo/util/assert_util.cpp
+	      src/mongo/util/background.cpp
+	      src/mongo/util/base64.cpp
+	      src/mongo/util/fail_point.cpp
+	      src/mongo/util/fail_point_registry.cpp
+	      src/mongo/util/fail_point_service.cpp
+	      src/mongo/util/hex.cpp
+	      src/mongo/util/log.cpp
+	      src/mongo/util/md5.cpp
+	      src/mongo/util/password_digest.cpp
+	      src/mongo/util/stringutils.cpp
+	      src/mongo/util/text.cpp
+	      src/mongo/util/timer.cpp
+	      src/mongo/util/time_support.cpp
+	      src/mongo/util/util.cpp
+	      ${PROJECT_SOURCE_DIR}/src/mongo/base/error_codes.cpp
 	    )
+	    
+add_library(mongoclient SHARED
+	    ${ALL_SRC}
+	    )
+add_custom_command(OUTPUT ${PROJECT_SOURCE_DIR}/src/mongo/base/error_codes.cpp
+		   COMMAND python generate_error_codes.py error_codes.err error_codes.h error_codes.cpp
+		   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/mongo/base/)
 
-target_link_libraries(mongoclient gtest)
-set_target_properties(mongoclient PROPERTIES PROJECT_LABEL lib_mongoclient)
+set(MONGO_CLIENT_LIB "${CMAKE_SOURCE_DIR}/libmongoclient.so")
+
