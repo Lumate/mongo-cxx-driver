@@ -22,6 +22,7 @@ aux_source_directory(src/mongo/util/net NET_SRC)
 aux_source_directory(src/mongo/util/concurrency/ CONC_SRC)
 aux_source_directory(src/mongo/db DB_SRC)
 aux_source_directory(src/mongo/client CLIENT_SRC)
+aux_source_directory(src/mongo/bson BSON_SRC)
 
 list(REMOVE_ITEM CLIENT_SRC src/mongo/client/sasl_client_authenticate_impl.cpp 
 			    src/mongo/client/include_bsonh_test.cpp
@@ -35,6 +36,7 @@ add_library(mongoclient SHARED
 	    ${CONC_SRC}
 	    ${DB_SRC}
 	    ${CLIENT_SRC}
+	    ${BSON_SRC}
 	    )
 
 set_target_properties(mongoclient PROPERTIES PROJECT_LABEL lib_mongoclient)
