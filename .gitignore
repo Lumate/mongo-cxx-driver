@@ -16,3 +16,5 @@
 ._.DS_Store
 *.fuse_*
 *.kdev4
+src/mongo/base/error_codes.h
+src/mongo/base/error_codes.cpp
