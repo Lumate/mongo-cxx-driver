@@ -88,6 +88,7 @@ set (ALL_SRC  src/mongo/base/global_initializer.cpp
 	      src/mongo/bson/util/bson_extract.cpp
 	      src/mongo/util/concurrency/synchronization.cpp
 	      src/mongo/util/concurrency/thread_name.cpp
+	      src/third_party/murmurhash3/MurmurHash3.cpp
 	      ${PROJECT_SOURCE_DIR}/src/mongo/base/error_codes.cpp
 	    )
 	    
