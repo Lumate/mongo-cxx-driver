@@ -84,10 +84,32 @@ set (ALL_SRC  src/mongo/base/global_initializer.cpp
 	    
 add_library(mongoclient SHARED
 	    ${ALL_SRC}
+	    ${PROJECT_SOURCE_DIR}/src/mongo/config.h
+	    ${PROJECT_SOURCE_DIR}/src/mongo/version.h
 	    )
 add_custom_command(OUTPUT ${PROJECT_SOURCE_DIR}/src/mongo/base/error_codes.cpp
 		   COMMAND python generate_error_codes.py error_codes.err error_codes.h error_codes.cpp
 		   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/mongo/base/)
 
 set(MONGO_CLIENT_LIB "${CMAKE_SOURCE_DIR}/libmongoclient.so")
+
+add_custom_command(OUTPUT ${PROJECT_SOURCE_DIR}/src/mongo/config.h
+                   COMMAND cp config.h.in config.h
+                   COMMAND sed -i 's/@mongoclient_ssl@/\\/\\/ \#undef MONGO_SSL/' config.h
+                   COMMAND sed -i 's/@mongoclient_sasl@/\\/\\/ \#undef MONGO_SASL/' config.h
+                   COMMAND sed -i 's/@mongoclient_have_header_unistd_h@/\#define MONGO_HAVE_HEADER_UNISTD_H 1/' config.h
+                   COMMAND sed -i 's/@mongoclient_have_cxx11_atomics@/\#define MONGO_HAVE_CXX11_ATOMICS 1/' config.h
+                   COMMAND sed -i 's/@mongoclient_have_gcc_atomic_builtins@/\\/\\/\#undef MONGO_HAVE_GCC_ATOMIC_BUILTINS 1/' config.h
+                   COMMAND sed -i 's/@mongoclient_have_gcc_sync_builtins@/\\/\\/\#undef MONGO_HAVE_GCC_SYNC_BUILTINS 1/' config.h
+                   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/mongo)
+
+add_custom_command(OUTPUT ${PROJECT_SOURCE_DIR}/src/mongo/version.h
+                   COMMAND cp version.h.in version.h
+                   COMMAND sed -i 's/@mongoclient_version_major@/0/' version.h
+                   COMMAND sed -i 's/@mongoclient_version_minor@/11/' version.h
+                   COMMAND sed -i 's/@mongoclient_version_patch@/0/' version.h
+
+                   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/mongo
+
+)
 
