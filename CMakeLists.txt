@@ -79,6 +79,15 @@ set (ALL_SRC  src/mongo/base/global_initializer.cpp
 	      src/mongo/util/timer.cpp
 	      src/mongo/util/time_support.cpp
 	      src/mongo/util/util.cpp
+	      src/mongo/util/net/ssl_manager.cpp
+	      src/mongo/util/net/message_port.cpp
+	      src/mongo/util/net/socket_poll.cpp
+	      src/mongo/util/net/message.cpp
+	      src/mongo/util/net/httpclient.cpp
+	      src/mongo/util/net/sock.cpp
+	      src/mongo/bson/util/bson_extract.cpp
+	      src/mongo/util/concurrency/synchronization.cpp
+	      src/mongo/util/concurrency/thread_name.cpp
 	      ${PROJECT_SOURCE_DIR}/src/mongo/base/error_codes.cpp
 	    )
 	    
