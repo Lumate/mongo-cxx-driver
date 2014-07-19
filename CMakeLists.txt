@@ -5,7 +5,7 @@ project (mongo-cxx-driver)
 find_package(Boost 1.55 COMPONENTS thread system regex REQUIRED)
 
 #enable c++ 11
-SET(CMAKE_CXX_FLAGS "-std=c++11 -g -fPIC ${CMAKE_CXX_FLAGS}")
+SET(CMAKE_CXX_FLAGS "-std=c++11 -O3 -fPIC ${CMAKE_CXX_FLAGS}")
 
 include_directories(src/
                     src/mongo/
