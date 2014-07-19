@@ -123,3 +123,9 @@ add_custom_command(OUTPUT ${PROJECT_SOURCE_DIR}/src/mongo/version.h
 
 )
 
+#clean up the generated files
+add_custom_command(TARGET mongoclient 
+                   POST_BUILD
+                   COMMAND rm ${PROJECT_SOURCE_DIR}/src/mongo/version.h ${PROJECT_SOURCE_DIR}/src/mongo/config.h
+                   )
+
