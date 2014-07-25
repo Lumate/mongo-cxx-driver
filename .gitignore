@@ -18,3 +18,5 @@
 *.kdev4
 src/mongo/base/error_codes.h
 src/mongo/base/error_codes.cpp
+src/mongo/config.h
+src/mongo/version.h

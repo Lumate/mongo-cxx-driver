@@ -5,7 +5,7 @@ project (mongo-cxx-driver)
 find_package(Boost 1.55 COMPONENTS thread system regex REQUIRED)
 
 #enable c++ 11
-SET(CMAKE_CXX_FLAGS "-std=c++11 -O3 -fPIC ${CMAKE_CXX_FLAGS}")
+add_compile_options(-std=c++11 -fPIC)
 
 include_directories(src/
                     src/mongo/
@@ -122,10 +122,3 @@ add_custom_command(OUTPUT ${PROJECT_SOURCE_DIR}/src/mongo/version.h
                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/mongo
 
 )
-
-#clean up the generated files
-add_custom_command(TARGET mongoclient 
-                   POST_BUILD
-                   COMMAND rm ${PROJECT_SOURCE_DIR}/src/mongo/version.h ${PROJECT_SOURCE_DIR}/src/mongo/config.h
-                   )
-
